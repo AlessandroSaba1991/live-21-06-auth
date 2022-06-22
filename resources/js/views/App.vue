@@ -1,12 +1,17 @@
 <template>
     <div>
-        <h1>Work in progresso</h1>
+        <WIP></WIP>
     </div>
 </template>
 
 <script>
+
+import WIP from '../components/WIP.vue'
+
 export default {
     name:'App',
-    components:{}
+    components:{
+        WIP,
+    }
 }
 </script>
