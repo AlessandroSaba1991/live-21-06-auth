@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Mockery\Generator\Parameter;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,10 +32,12 @@ Route::middleware('auth')
     //Admin Dashbors
     Route::get('/', 'HomeController@index')->name('dashboard'); //admin.dashboard
     //Admin Posts
-    route::resource('posts','PostController')->parameters([
+    Route::resource('posts','PostController')->parameters([
         'posts' => 'post:slug'
     ]);
-
+    Route::resource('categories','CategoryController')->parameters([
+        'categories' => 'category:slug'
+    ])->except(['show','create','edit']);
 });
 
 

@@ -24,6 +24,18 @@
             @enderror
         </div>
         <div class="mb-3">
+          <label for="category_id" class="form-label">Categories</label>
+          <select class="form-control @error('category_id') is-invalid @enderror" name="category_id" id="category_id" >
+            <option value="">Select Category</option>
+            @foreach($categories as $category)
+            <option value="{{ $category->id }}" {{old('category_id') == $category->id ? 'selected' : ''}}>{{$category->name}}</option>
+            @endforeach
+          </select>
+          @error('category_id')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
           <label for="content" class="form-label">Content</label>
           <textarea class="form-control @error('content') is-invalid @enderror" name="content" id="content" rows="3">{{old('content')}}</textarea>
           @error('content')

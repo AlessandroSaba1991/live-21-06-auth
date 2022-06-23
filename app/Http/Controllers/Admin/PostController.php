@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 
@@ -27,7 +28,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create',compact('categories'));
     }
 
     /**
@@ -41,6 +43,7 @@ class PostController extends Controller
         $validate_data = $request->validated();
         $slug = Post::generateSlug($request->title);
         $validate_data['slug'] =$slug;
+        //dd($validate_data);
         Post::create($validate_data);
         return redirect()->route('admin.posts.index')->with('message','Post Created Successfully');
     }
@@ -65,7 +68,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit',compact('post'));
+        $categories = Category::all();
+        return view('admin.posts.edit',compact('post','categories'));
     }
 
     /**

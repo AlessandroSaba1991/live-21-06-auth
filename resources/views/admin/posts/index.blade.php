@@ -8,11 +8,7 @@
             <a class="btn btn-primary" href="{{route('admin.posts.create')}}" role="button">Create New Post</a>
         </div>
     </div>
-    @if (session('message'))
-    <div class="alert alert-success">
-        {{ session('message') }}
-    </div>
-    @endif
+    @include('partials.message')
     <table class="table table-striped">
         <thead>
             <tr>
