@@ -36,6 +36,17 @@
             @enderror
         </div>
         <div class="mb-3">
+          <label for="tag_id" class="form-label">Tags</label>
+          <select multiple class="form-select" name="tags[]" id="tag_id" aria-label="Tag">
+            <option value="" disabled>Select a Tags</option>
+            @forelse($tags as $tag)
+            <option value="{{$tag->id}}">{{$tag->name}}</option>
+            @empty
+            <option>No Tags</option>
+            @endforelse
+          </select>
+        </div>
+        <div class="mb-3">
           <label for="content" class="form-label">Content</label>
           <textarea class="form-control @error('content') is-invalid @enderror" name="content" id="content" rows="3">{{old('content')}}</textarea>
           @error('content')

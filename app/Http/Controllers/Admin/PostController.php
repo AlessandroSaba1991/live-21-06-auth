@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -29,7 +30,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create',compact('categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create',compact('categories','tags'));
     }
 
     /**
@@ -40,11 +42,12 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
+        //dd($request->all());
         $validate_data = $request->validated();
         $slug = Post::generateSlug($request->title);
         $validate_data['slug'] =$slug;
-        //dd($validate_data);
-        Post::create($validate_data);
+        $new_post = Post::create($validate_data);
+        $new_post->tags()->attach($request->tags);
         return redirect()->route('admin.posts.index')->with('message','Post Created Successfully');
     }
 
@@ -69,7 +72,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit',compact('post','categories'));
+        $tags = Tag::all();
+        return view('admin.posts.edit',compact('post','categories','tags'));
     }
 
     /**
@@ -85,6 +89,7 @@ class PostController extends Controller
         $slug = Post::generateSlug($request->title);
         $validate_data['slug'] =$slug;
         $post->update($validate_data);
+        $post->tags()->sync($request->tags);
         return redirect()->route('admin.posts.show',$post)->with('message','Post Update Successfully');
     }
 

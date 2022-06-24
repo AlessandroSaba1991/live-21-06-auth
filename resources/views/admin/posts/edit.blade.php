@@ -27,8 +27,26 @@
         <select class="form-control @error('category_id') is-invalid @enderror" name="category_id" id="category_id">
             <option value="">Select Category</option>
             @foreach($categories as $category)
-            <option value="{{ $category->id }}" {{$post->category_id == old('category_id', $category->id) ? 'selected' : ''}} >{{$category->name}}</option>
+            <option value="{{ $category->id }}" {{$post->category_id == old('category_id', $category->id) ? 'selected' : ''}}>{{$category->name}}</option>
             @endforeach
+        </select>
+        @error('category_id')
+        <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="mb-3">
+        <label for="tag_id" class="form-label">Tags</label>
+        <select multiple class="form-select" name="tags[]" id="tag_id" aria-label="Tag">
+            <option value="" disabled>Select a Tags</option>
+            @forelse($tags as $tag)
+            @if($errors->any())
+            <option value="{{$tag->id}}" {{in_array($tag->id,old('tags')) ? 'selected' : ''}}>{{$tag->name}}</option>
+            @else
+            <option value="{{$tag->id}}" {{$post->tags->contains($tag->id) ? 'selected' : ''}}>{{$tag->name}}</option>
+            @endif
+            @empty
+            <option>No Tags</option>
+            @endforelse
         </select>
         @error('category_id')
         <div class="alert alert-danger">{{ $message }}</div>
