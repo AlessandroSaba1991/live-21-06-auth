@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\PostUpdateAdminMessage;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Generator\Parameter;
@@ -45,8 +47,11 @@ Route::middleware('auth')
 
 
 
-
-
+//per vedere la mail a schermo
+Route::get('mailable',function(){
+    $post = Post::findOrFail(1);
+    return new PostUpdateAdminMessage($post);
+});
 
 
 

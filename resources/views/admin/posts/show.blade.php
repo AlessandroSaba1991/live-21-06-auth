@@ -8,7 +8,7 @@
     </div>
     @endif
     <div class="post d-flex py-4">
-        <img class="img-fluid" src="{{$post->cover_image}}" alt="">
+        <img class="img-fluid" src="{{asset('storage/' . $post->cover_image)}}" alt="">
         <div class="post_data p-4">
             <h1>{{$post->title}}</h1>
             <div class="metadata">

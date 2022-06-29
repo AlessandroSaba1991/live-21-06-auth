@@ -26,7 +26,7 @@
                 <td>{{$post->title}}</td>
                 <td>{{$post->slug}}</td>
                 <td>
-                    <img width="150" src="{{$post->cover_image}}" alt="">
+                    <img width="150" src="{{asset('storage/' . $post->cover_image)}}" alt="">
                 </td>
                 <td>
                     <a class="btn btn-primary" href="{{route('admin.posts.show',$post->slug)}}">Views</a>
