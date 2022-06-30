@@ -1,216 +1,68 @@
 <template>
   <div>
-    <banner-component></banner-component>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-2">
-          <aside class="py-5">
-            <div class="widget categories p-3">
-              <h2>All Categories</h2>
-              <ul class="list-unstyled">
-                <li v-for="category in categories" :key="category.id">
-                  {{ category.name }}
-                </li>
-              </ul>
-            </div>
-            <div class="widget tags p-3">
-              <h2>All Tags</h2>
-              <ul class="list-unstyled">
-                <li v-for="tag in tags" :key="tag.id">
-                  {{ tag.name }}
-                </li>
-              </ul>
-            </div>
-          </aside>
-        </div>
-        <div class="col-10">
-          <main class="py-5">
-            <section class="posts">
-              <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
-                  <div
-                    class="col"
-                    v-for="post in posts_response.data"
-                    :key="post.id"
-                  >
-                    <div class="product card h-100 m-3">
-                      <img
-                        class="img-fluid"
-                        :src="'storage/' + post.cover_image"
-                        :alt="post.title"
-                      />
-                      <div class="card-body">
-                        <h3>{{ post.title }}</h3>
-                        <p>{{ trimText(post.content) }}</p>
-                      </div>
-                      <div class="card-footer">
-                        <div class="row">
-                          <div class="col">
-                            <div class="user" v-if="post.user">
-                              <strong>Autor</strong> {{ post.user.name }}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col">
-                          <span v-if="post.category"
-                            ><strong>Category:</strong>
-                            {{ post.category.name }}
-                          </span>
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+      <div class="container">
+        <router-link class="navbar-brand" :to="{ name: 'home' }">
+          BoolPress
+        </router-link>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label=""
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-                          <div class="tags" v-if="post.tags.length > 0">
-                            <strong>Tags:</strong>
-                            <ul class="list-unstyled">
-                              <li v-for="tag in post.tags" :key="tag.id">
-                                {{ tag.name }}
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="pagination justify-content-center py-5">
-                <nav aria-label="Page navigation ">
-                  <ul class="pagination">
-                    <li
-                      class="page-item"
-                      v-if="posts_response.current_page > 1"
-                    >
-                      <a
-                        class="page-link"
-                        href="#"
-                        aria-label="Previous"
-                        @click.prevent="
-                          getAllPosts(posts_response.current_page - 1)
-                        "
-                      >
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="visually-hidden">Previous</span>
-                      </a>
-                    </li>
-                    <li
-                      :class="{
-                        'page-item': true,
-                        active: page == posts_response.current_page,
-                      }"
-                      v-for="page in posts_response.last_page"
-                      :key="page"
-                    >
-                      <a
-                        class="page-link"
-                        href="#"
-                        @click="getAllPosts(page)"
-                        >{{ page }}</a
-                      >
-                    </li>
-                    <li
-                      class="page-item"
-                      v-if="
-                        posts_response.current_page < posts_response.last_page
-                      "
-                    >
-                      <a
-                        class="page-link"
-                        href="#"
-                        aria-label="Next"
-                        @click.prevent="
-                          getAllPosts(posts_response.current_page + 1)
-                        "
-                      >
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="visually-hidden">Next</span>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </section>
-          </main>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Left Side Of Navbar -->
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item" v-for="item in menu_items" :key="item.id">
+              <router-link class="nav-link" :to="{name : item.route_name}">{{item.route_text}}</router-link>
+            </li>
+          </ul>
+
+          <!-- Right Side Of Navbar -->
+          <ul class="navbar-nav ms-auto">
+
+          </ul>
         </div>
       </div>
-    </div>
+    </nav>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import BannerComponent from "../components/BannerComponent.vue";
-
 export default {
   name: "App",
-  components: {
-    BannerComponent,
-  },
   data() {
     return {
-      posts_response: "",
-      categories: "",
-      tags: "",
+      menu_items: [
+        {
+            id:1,
+          route_name: "home",
+          route_text: "Home",
+        },
+        {
+            id:2,
+          route_name: "about",
+          route_text: "About",
+        },
+        {
+            id:3,
+          route_name: "posts",
+          route_text: "Posts",
+        },
+      ],
     };
-  },
-  methods: {
-    getAllPosts(postPage) {
-      axios
-        .get("/api/posts", {
-          params: {
-            page: postPage,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          this.posts_response = response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
-    getAllCategories() {
-      axios
-        .get("/api/categories")
-        .then((response) => {
-          console.log(response);
-          this.categories = response.data;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    },
-    getAllTags() {
-      axios
-        .get("/api/tags")
-        .then((response) => {
-          console.log(response);
-          this.tags = response.data;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    },
-    trimText(text){
-        if(text.length > 100){
-            return text.slice(0,100) + '...'
-        } else {
-            return text
-        }
-    }
-  },
-  mounted() {
-    this.getAllPosts(1);
-    this.getAllCategories();
-    this.getAllTags();
   },
 };
 </script>
 
 
 <style lang="scss" scoped>
-aside{
-    .widget{
-        padding: 0.5rem;
-        border-radius: 1rem;
-        margin-bottom: 1rem;
-        background-color: rgb(227, 223, 223);
-    }
-}
 </style>

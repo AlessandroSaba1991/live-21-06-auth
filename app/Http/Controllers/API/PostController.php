@@ -35,7 +35,12 @@ class PostController extends Controller
     return $posts; */
 
     //Recuperi tutte le associazioni con paginazione
-    $posts= Post::with(['tags','category','user'])->paginate(5);
+    $posts= Post::with(['tags','category','user'])->orderByDesc('id')->paginate(5) ;
     return $posts;
+    }
+    public function show($slug)
+    {
+        $post = Post::with(['tags','category','user'])->where('slug',$slug)->first();
+        return $post;
     }
 }
