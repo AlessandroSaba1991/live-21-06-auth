@@ -4,7 +4,7 @@ namespace App\Models;
 
 /* use App\Models\Category; */ //non serve
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

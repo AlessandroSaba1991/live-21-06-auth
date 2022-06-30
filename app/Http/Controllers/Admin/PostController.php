@@ -25,7 +25,7 @@ class PostController extends Controller
         //prende tutti i post
         //$posts = Post::all()->sortDesc();
         //prende tutti i post del user loggato
-        $posts = Auth::user()->posts;
+        $posts = Post::all()->sortDesc();
 
         //dd($posts);
         return view('admin.posts.index',compact('posts'));
