@@ -10,6 +10,9 @@ import Home from "./Pages/Home";
 import About from "./Pages/About";
 import Posts from "./Pages/Posts";
 import Post from "./Pages/Post";
+import Contacts from "./Pages/Contacts";
+import NotFound from "./Pages/NotFound";
+
 
 
 // 2. Define some routes
@@ -37,6 +40,16 @@ const routes = [
         path: "/posts/:slug",
         name: "post",
         component: Post,
+    },
+    {
+        path: "/contacts",
+        name: "contacts",
+        component: Contacts,
+    },
+    {
+        path: "*",
+        name: "not-found",
+        component: NotFound,
     },
 ];
 

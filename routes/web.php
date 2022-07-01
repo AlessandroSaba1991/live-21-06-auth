@@ -4,6 +4,7 @@ use App\Mail\PostUpdateAdminMessage;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Mockery\Generator\Parameter;
 
 /*
@@ -22,33 +23,38 @@ use Mockery\Generator\Parameter;
 });
 */
 
+Route::get('contact-form', 'MessageController@index')->name('contact.form.index');
+Route::post('contact-form', 'MessageController@store');
+
+
 Auth::routes();
 
 
 Route::middleware('auth')
-->prefix('admin')
-->namespace('Admin')
-->name('admin.')
-->group(function ()
-{
-    //Admin Dashbors
-    Route::get('/', 'HomeController@index')->name('dashboard'); //admin.dashboard
-    //Admin Posts
-    Route::resource('posts','PostController')->parameters([
-        'posts' => 'post:slug'
-    ]);
-    Route::resource('categories','CategoryController')->parameters([
-        'categories' => 'category:slug'
-    ])->except(['show','create','edit']);
-    Route::resource('tags','TagController')->parameters([
-        'tags' => 'tag:slug'
-    ])->except(['show','create','edit']);
-});
+    ->prefix('admin')
+    ->namespace('Admin')
+    ->name('admin.')
+    ->group(function () {
+        //Admin Dashbors
+        Route::get('/', 'HomeController@index')->name('dashboard'); //admin.dashboard
+        //Admin Posts
+        Route::resource('posts', 'PostController')->parameters([
+            'posts' => 'post:slug'
+        ]);
+        Route::resource('categories', 'CategoryController')->parameters([
+            'categories' => 'category:slug'
+        ])->except(['show', 'create', 'edit']);
+        Route::resource('tags', 'TagController')->parameters([
+            'tags' => 'tag:slug'
+        ])->except(['show', 'create', 'edit']);
+
+        Route::resource('messages', 'MessageController');
+    });
 
 
 
 //per vedere la mail a schermo
-Route::get('mailable',function(){
+Route::get('mailable', function () {
     $post = Post::findOrFail(1);
     return new PostUpdateAdminMessage($post);
 });
@@ -57,10 +63,9 @@ Route::get('mailable',function(){
 
 
 /* DEVE ESSERE SEMPRE L'ULTIMA */
-Route::get("{any?}", function ()
-{
+Route::get("{any?}", function () {
     return view('guest.home');
-})->where('any','.*');
+})->where('any', '.*');
 
 
 /*
